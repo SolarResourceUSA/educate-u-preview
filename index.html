@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Educate U — Go back to school, on your terms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,500;1,9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    /* Brand (indigo = theirs) + warm editorial system */
+    --indigo:#4F46E9; --indigo-2:#6366F1; --indigo-deep:#312B86; --ink:#1A1740;
+    --amber:#E89A3C; --amber-deep:#C9781E; --rose:#E8765A;
+    --paper:#FAF5EB; --paper-2:#F4ECDC; --card:#FFFCF6; --line:#E7DDC8;
+    --mut:#6E6856; --ink-soft:#43406a;
+    --maxw:1200px;
+    --serif:'Fraunces',Georgia,serif;
+    --sans:'Hanken Grotesk',system-ui,sans-serif;
+    --grad-indigo:linear-gradient(150deg,#4F46E9 0%,#6366F1 48%,#8b89f4 100%);
+    --grad-warm:linear-gradient(135deg,#E89A3C 0%,#E8765A 100%);
+    --shadow:0 30px 60px -28px rgba(26,23,64,.42);
+  }
+  @font-face{font-family:'Redemption';
+    src:local('Redemption'),
+        url('Redemption.ttf') format('truetype'),
+        url('Redemption.otf') format('opentype'),
+        url('redemption.ttf') format('truetype');
+    font-weight:normal;font-style:normal;font-display:swap}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans);color:var(--ink);background:var(--paper);
+    line-height:1.62;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+    background-image:radial-gradient(900px 600px at 88% -8%,rgba(232,154,60,.10),transparent 60%),
+                     radial-gradient(820px 560px at -6% 12%,rgba(79,70,233,.08),transparent 60%);
+  }
+  /* paper grain */
+  body::before{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.04;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}
+  h1,h2,h3,.serif{font-family:var(--serif);font-weight:600;line-height:1.04;letter-spacing:-.018em;color:var(--ink)}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 30px}
+  .eyebrow{font-size:12.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--amber-deep);display:inline-flex;align-items:center;gap:9px}
+  .eyebrow::before{content:"";width:26px;height:1.5px;background:var(--amber-deep);display:inline-block}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-weight:600;font-size:15px;padding:14px 26px;border-radius:999px;transition:.25s cubic-bezier(.2,.8,.2,1);cursor:pointer;border:1.5px solid transparent}
+  .btn-pri{background:var(--ink);color:var(--paper)}
+  .btn-pri:hover{background:var(--indigo);transform:translateY(-2px);box-shadow:0 14px 30px -12px rgba(79,70,233,.6)}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--ink);border-width:1.5px}
+  .btn-ghost:hover{background:var(--ink);color:var(--paper)}
+  .btn-warm{background:var(--grad-warm);color:#fff}
+  .btn-warm:hover{transform:translateY(-2px);box-shadow:0 14px 30px -12px rgba(232,118,90,.6)}
+  .link-arrow{font-weight:600;color:var(--indigo);display:inline-flex;align-items:center;gap:6px;transition:.2s}
+  .link-arrow:hover{gap:11px}
+
+  /* NAV */
+  header{position:sticky;top:0;z-index:60;backdrop-filter:blur(12px);background:rgba(250,245,235,.78);border-bottom:1px solid var(--line)}
+  nav{display:flex;align-items:center;justify-content:space-between;height:76px}
+  .brand{display:flex;align-items:center;gap:11px}
+  .brand img{height:36px;width:auto}
+  .brand .wm{font-family:var(--serif);font-weight:700;font-size:23px;letter-spacing:-.02em}
+  .brand .wm b{color:var(--indigo);font-style:italic}
+  .navlinks{display:flex;gap:34px;font-size:15px;font-weight:500;color:var(--ink-soft)}
+  .navlinks a{position:relative}
+  .navlinks a::after{content:"";position:absolute;left:0;bottom:-5px;height:2px;width:0;background:var(--amber);transition:.25s}
+  .navlinks a:hover::after{width:100%}
+  .nav-cta{display:flex;gap:12px;align-items:center}
+  @media(max-width:880px){.navlinks{display:none}.nav-cta .btn-ghost{display:none}}
+
+  /* HERO — full-bleed hyperlapse + floating card */
+  .hero{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden;background:var(--ink)}
+  .hero-bg{position:absolute;inset:0;z-index:0}
+  .hero-bg video{width:100%;height:100%;object-fit:cover;display:block}
+  .hero-bg::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(100deg,rgba(20,17,52,.78) 0%,rgba(20,17,52,.40) 44%,rgba(20,17,52,.08) 72%),
+               radial-gradient(720px 520px at 86% 116%,rgba(232,154,60,.24),transparent 60%);}
+  .hero .wrap{position:relative;z-index:2;width:100%;display:flex;justify-content:space-between;align-items:center;gap:40px;padding-top:40px;padding-bottom:40px}
+  @media(max-width:980px){.hero .wrap{justify-content:center}}
+  /* left-side overlay that balances the card on the right */
+  .hero-left{max-width:430px;color:#fff;flex:0 1 auto}
+  .hero-left .hero-logo{display:block;height:62px;width:auto;margin-bottom:22px;filter:brightness(0) invert(1) drop-shadow(0 2px 18px rgba(8,6,26,.55))}
+  .hero-left .kick{font-size:12.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#fff;display:inline-flex;align-items:center;gap:9px;opacity:.96}
+  .hero-left .kick::before{content:"";width:26px;height:1.5px;background:var(--amber);display:inline-block}
+  .hero-left h2{font-family:var(--serif);font-weight:500;font-size:clamp(34px,4.4vw,54px);line-height:1.03;color:#fff;margin:16px 0 0;text-shadow:0 2px 34px rgba(8,6,26,.55)}
+  .hero-left h2 em{font-style:italic;color:#f2bd7e}
+  .hero-left p{font-size:17px;color:rgba(255,255,255,.92);max-width:382px;margin:18px 0 24px;text-shadow:0 1px 20px rgba(8,6,26,.6)}
+  .hero-left .cue{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;color:#fff;border-bottom:1.5px solid var(--amber);padding-bottom:3px;transition:.2s}
+  .hero-left .cue:hover{color:#f2bd7e;gap:12px}
+  @media(max-width:980px){.hero-left{display:none}}
+  .hero-card{position:relative;background:rgba(255,252,246,.93);backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,.55);border-radius:28px;padding:48px 48px 44px;max-width:600px;
+    box-shadow:0 44px 100px -34px rgba(8,6,26,.78)}
+  @media(max-width:520px){.hero-card{padding:34px 26px}}
+  .hero-card h1{font-size:clamp(33px,4.6vw,56px);font-weight:500;margin:18px 0 0}
+  .hero-card h1 .lead{font-weight:400;color:var(--ink-soft)}
+  .rotline{display:block;min-height:1.35em;font-weight:600;overflow:visible}
+  .rotword{font-family:'Redemption','Permanent Marker',cursive;font-weight:400;font-size:1.05em;line-height:1.18;letter-spacing:.5px;
+    color:var(--indigo);position:relative;display:inline-block;padding:0 .1em .1em 0;
+    clip-path:inset(0 100% 0 0);will-change:clip-path}
+  .rotword.writing{animation:write 1s cubic-bezier(.52,.04,.2,1) forwards}
+  @keyframes write{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 -12% 0 0)}}
+  .hero-card p.sub{font-size:17.5px;color:var(--ink-soft);margin:22px 0 28px}
+  .hero-cta{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+  .hero-cta .inst{font-size:14.5px;font-weight:600;color:var(--mut);border-bottom:1.5px solid transparent;transition:.2s}
+  .hero-cta .inst:hover{color:var(--indigo);border-color:var(--amber)}
+  .hero-pill{position:absolute;top:-19px;left:24px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-size:13.5px;font-weight:600;box-shadow:var(--shadow);display:flex;align-items:center;gap:8px;z-index:3}
+  .dotg{width:8px;height:8px;border-radius:50%;background:#3fae6b;box-shadow:0 0 0 4px rgba(63,174,107,.18)}
+  /* staggered intro */
+  .intro{opacity:0;transform:translateY(20px);animation:rise .9s cubic-bezier(.2,.8,.2,1) forwards}
+  .d1{animation-delay:.05s}.d2{animation-delay:.18s}.d3{animation-delay:.31s}.d4{animation-delay:.44s}.d5{animation-delay:.57s}
+  @keyframes rise{to{opacity:1;transform:none}}
+
+  /* MARQUEE */
+  .marquee{padding:30px 0 6px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(244,236,220,.5);overflow:hidden}
+  .mq-lbl{text-align:center;font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--mut);margin-bottom:18px}
+  .mq-track{display:flex;gap:56px;width:max-content;animation:scroll 26s linear infinite;align-items:center;padding-bottom:24px}
+  .marquee:hover .mq-track{animation-play-state:paused}
+  @keyframes scroll{to{transform:translateX(-50%)}}
+  .mq-item{font-family:var(--serif);font-weight:600;font-size:23px;color:var(--ink-soft);white-space:nowrap;opacity:.78}
+  .mq-item span{color:var(--amber-deep);margin-left:18px}
+
+  /* SECTION base */
+  section.block{padding:96px 0}
+  .sec-head{max-width:720px}
+  .sec-head.center{margin:0 auto;text-align:center}
+  .sec-head h2{font-size:clamp(32px,4.6vw,52px);font-weight:500;margin-top:16px}
+  .sec-head h2 em{font-style:italic;color:var(--indigo)}
+  .sec-head p{color:var(--ink-soft);font-size:18.5px;margin-top:18px}
+
+  /* HOW WE HELP — editorial side-sliding rows */
+  .steps{margin-top:62px;display:flex;flex-direction:column;gap:14px}
+  .step{display:grid;grid-template-columns:auto 1fr 1fr;gap:38px;align-items:center;padding:34px 0;border-top:1px solid var(--line);
+        opacity:0;transform:translateX(var(--from,-70px));transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)}
+  .step.in{opacity:1;transform:translateX(0)}
+  .step:nth-child(even){--from:70px}
+  .step:nth-child(even) .step-art{order:-1}
+  .step:last-child{border-bottom:1px solid var(--line)}
+  @media(max-width:860px){.step{grid-template-columns:auto 1fr;gap:20px 22px}.step-art{grid-column:1 / -1;order:0!important}}
+  .step-no{font-family:var(--serif);font-weight:400;font-size:clamp(40px,5vw,68px);font-style:italic;color:var(--amber);line-height:.8;width:1.4em}
+  .step h3{font-size:clamp(24px,2.8vw,32px);font-weight:600;margin-bottom:10px}
+  .step p{color:var(--ink-soft);font-size:16.5px;max-width:440px}
+  .step .tags{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{font-size:12.5px;font-weight:600;color:var(--indigo-deep);background:rgba(79,70,233,.08);border:1px solid rgba(79,70,233,.14);border-radius:999px;padding:6px 13px}
+  .step-art{aspect-ratio:5/3.4;border-radius:20px;background:var(--card);border:1px solid var(--line);position:relative;overflow:hidden;display:grid;place-items:center;box-shadow:0 20px 40px -30px rgba(26,23,64,.4)}
+  .step-art::before{content:"";position:absolute;inset:0;background:radial-gradient(300px 220px at 70% 20%,rgba(79,70,233,.10),transparent 60%),radial-gradient(260px 200px at 16% 90%,rgba(232,154,60,.14),transparent 60%)}
+  .step-art .ring{position:absolute;width:300px;height:300px;border-radius:50%;border:1.5px solid rgba(79,70,233,.14)}
+  .step-art .ring.b{width:190px;height:190px;border-color:rgba(232,154,60,.32)}
+  .step-art .emoji{font-size:54px;position:relative}
+  .step-art>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+  .step-art small{position:absolute;bottom:12px;left:14px;font-size:10.5px;color:var(--mut);font-style:italic}
+
+  /* DUAL AUDIENCE (dark) */
+  .dual{background:var(--ink);color:#fff;position:relative;overflow:hidden}
+  .dual::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 480px at 84% 0%,rgba(99,102,241,.4),transparent 55%),radial-gradient(560px 420px at 6% 100%,rgba(232,154,60,.18),transparent 55%)}
+  .dual .wrap{position:relative}
+  .dual .eyebrow{color:#f2bd7e}.dual .eyebrow::before{background:#f2bd7e}
+  .dual .sec-head h2{color:#fff}.dual .sec-head h2 em{color:#b9b6ff}
+  .dual .sec-head p{color:#cfcde9}
+  .dual-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;margin-top:50px}
+  @media(max-width:860px){.dual-grid{grid-template-columns:1fr}}
+  .dcard{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.13);border-radius:22px;padding:38px;backdrop-filter:blur(4px)}
+  .dcard.feat{background:var(--grad-indigo);border-color:transparent;box-shadow:0 40px 70px -34px rgba(79,70,233,.7)}
+  .dcard .who{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#a9a6e6}
+  .dcard.feat .who{color:rgba(255,255,255,.86)}
+  .dcard h3{color:#fff;font-size:28px;font-weight:600;margin:12px 0 12px}
+  .dcard p{color:#d8d6f0;font-size:16px}
+  .dcard.feat p{color:#ecebfb}
+  .dcard ul{list-style:none;margin:20px 0 0;display:flex;flex-direction:column;gap:11px}
+  .dcard li{display:flex;gap:11px;font-size:15px;color:#e7e6f6;align-items:flex-start}
+  .dcard li::before{content:"";flex:0 0 auto;width:18px;height:18px;margin-top:2px;border-radius:50%;background:rgba(169,180,252,.18);background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a5b4fc' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");background-size:13px;background-repeat:no-repeat;background-position:center}
+  .dcard.feat li::before{background:rgba(255,255,255,.18);background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>")}
+  .dcard .more{display:inline-flex;margin-top:24px;font-weight:600;color:#fff;border-bottom:1.5px solid rgba(255,255,255,.45);padding-bottom:2px;gap:7px}
+
+  /* STATS */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:54px;border-top:1px solid rgba(255,255,255,.14);padding-top:38px}
+  @media(max-width:680px){.stats{grid-template-columns:1fr 1fr;gap:30px 18px}}
+  .stat .n{font-family:var(--serif);font-weight:500;font-size:clamp(36px,4.4vw,52px);color:#fff}
+  .stat .n em{font-style:italic;color:#f2bd7e}
+  .stat .l{font-size:14px;color:#bcbad8;margin-top:4px}
+
+  /* NOTE FROM */
+  .note{background:var(--paper-2)}
+  .note .wrap{display:grid;grid-template-columns:.82fr 1.18fr;gap:54px;align-items:center}
+  @media(max-width:860px){.note .wrap{grid-template-columns:1fr;gap:30px}}
+  .note-photo{aspect-ratio:1;border-radius:26px;background:var(--grad-indigo);position:relative;overflow:hidden;box-shadow:var(--shadow);display:grid;place-items:center;transform:rotate(-1.4deg)}
+  .note-photo::after{content:"";position:absolute;inset:0;background:radial-gradient(360px 320px at 70% 84%,rgba(232,154,60,.45),transparent 60%)}
+  .note-photo .play{position:relative;z-index:2;width:70px;height:70px;border-radius:50%;background:rgba(255,252,246,.95);display:grid;place-items:center;cursor:pointer;box-shadow:0 14px 30px -8px rgba(26,23,64,.55);transition:.25s}
+  .note-photo .play:hover{transform:scale(1.07)}
+  .note-photo .play::after{content:"";border-left:19px solid var(--indigo);border-top:12px solid transparent;border-bottom:12px solid transparent;margin-left:5px}
+  .note-photo small{position:absolute;bottom:14px;left:16px;color:rgba(255,255,255,.85);font-size:10.5px;font-style:italic;z-index:2}
+  .note h2{font-size:clamp(30px,4.2vw,46px);font-weight:500}
+  .note h2 em{font-style:italic;color:var(--indigo)}
+  .note .body{font-size:18.5px;color:var(--ink-soft);margin:22px 0 20px;max-width:540px}
+  .note .sig{font-family:var(--serif);font-weight:600;font-size:19px}
+  .note .sig small{display:block;font-family:var(--sans);font-weight:500;font-size:14px;color:var(--mut);font-style:italic;margin-top:2px}
+
+  /* QUOTE */
+  .quote{text-align:center}
+  .quote .mk{font-family:var(--serif);font-style:italic;font-size:90px;line-height:0;color:var(--amber);height:.5em;display:block}
+  .quote blockquote{font-family:var(--serif);font-weight:500;font-size:clamp(24px,3.4vw,38px);line-height:1.28;max-width:900px;margin:0 auto;color:var(--ink)}
+  .quote .by{margin-top:28px;font-size:15px;color:var(--mut)}
+  .quote .by b{color:var(--ink);font-weight:600}
+
+  /* CTA */
+  .cta-final{position:relative;overflow:hidden;background:var(--ink);color:#fff;text-align:center;border-radius:32px;padding:74px 30px;margin:46px auto 0;box-shadow:var(--shadow)}
+  .cta-final::before{content:"";position:absolute;inset:0;background:radial-gradient(620px 460px at 18% 0%,rgba(99,102,241,.45),transparent 55%),radial-gradient(560px 440px at 88% 100%,rgba(232,154,60,.32),transparent 55%)}
+  .cta-final>*{position:relative}
+  .cta-final h2{color:#fff;font-size:clamp(32px,4.6vw,54px);font-weight:500}
+  .cta-final h2 em{font-style:italic;color:#f2bd7e}
+  .cta-final p{color:rgba(255,255,255,.86);font-size:18.5px;max-width:580px;margin:18px auto 30px}
+  .cta-final .row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .cta-final .btn-light{background:rgba(255,255,255,.12);color:#fff;border:1.5px solid rgba(255,255,255,.32)}
+  .cta-final .btn-light:hover{background:rgba(255,255,255,.22)}
+
+  /* FOUNDER — quote-led, modest circular headshot in the signature */
+  .founder{background:var(--paper-2)}
+  .founder .wrap{max-width:860px;margin:0 auto;text-align:center}
+  .founder .eyebrow{justify-content:center}
+  .founder .mk{font-family:var(--serif);font-style:italic;font-size:80px;line-height:0;color:var(--amber);height:.4em;display:block;margin-top:20px}
+  .founder blockquote{font-family:var(--serif);font-weight:500;font-size:clamp(23px,3.2vw,36px);line-height:1.32;color:var(--ink);letter-spacing:-.015em;max-width:820px;margin:0 auto}
+  .founder blockquote em{font-style:italic;color:var(--indigo)}
+  .founder .by{margin-top:32px;display:inline-flex;align-items:center;gap:14px}
+  .founder .by .avatar{width:62px;height:62px;border-radius:50%;object-fit:cover;object-position:64% 26%;border:2px solid var(--card);box-shadow:0 8px 20px -8px rgba(26,23,64,.45)}
+  .founder .by .who{text-align:left}
+  .founder .by .who .name{font-family:var(--serif);font-weight:600;font-size:17px;color:var(--ink);display:block}
+  .founder .by .who small{font-family:var(--sans);font-weight:500;font-size:13.5px;color:var(--mut);font-style:italic}
+
+  /* ===== REAL STORIES — testimonial video rows (alternating side-slide) ===== */
+  .tst{background:var(--paper-2)}
+  .tst-rows{margin-top:58px;display:flex;flex-direction:column;gap:30px}
+  .tst-row{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:center;
+    opacity:0;transform:translateX(var(--from,-72px));
+    transition:opacity .85s ease,transform .85s cubic-bezier(.2,.8,.2,1)}
+  .tst-row.in{opacity:1;transform:translateX(0)}
+  .tst-row:nth-child(even){--from:72px}
+  .tst-row:nth-child(even) .tst-video{order:2}
+  @media(max-width:820px){.tst-row{grid-template-columns:1fr;gap:24px}.tst-row:nth-child(even) .tst-video{order:0}}
+  /* video frame */
+  .tst-video{position:relative;width:100%;max-width:330px;aspect-ratio:9/16;margin:0 auto;
+    border-radius:22px;overflow:hidden;background:var(--grad-indigo);box-shadow:var(--shadow)}
+  .tst-video video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;background:#000}
+  .tst-video .tst-ph{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:24px;
+    background:var(--grad-indigo)}
+  .tst-video .tst-ph::after{content:"";position:absolute;inset:0;background:radial-gradient(360px 320px at 70% 86%,rgba(232,154,60,.42),transparent 60%)}
+  .tst-video.has-video .tst-ph{display:none}
+  .tst-ph .pl{position:relative;z-index:2;width:66px;height:66px;border-radius:50%;background:rgba(255,252,246,.95);display:grid;place-items:center;box-shadow:0 14px 30px -8px rgba(26,23,64,.55)}
+  .tst-ph .pl::after{content:"";border-left:18px solid var(--indigo);border-top:11px solid transparent;border-bottom:11px solid transparent;margin-left:5px}
+  .tst-ph b{position:relative;z-index:2;color:#fff;font-family:var(--serif);font-weight:600;font-size:17px;margin-top:10px}
+  .tst-ph small{position:relative;z-index:2;color:rgba(255,255,255,.82);font-size:11.5px;font-style:italic}
+  /* quote side */
+  .tst-quote .qmark{font-family:var(--serif);font-style:italic;font-size:74px;line-height:0;color:var(--amber);height:.45em;display:block}
+  .tst-quote blockquote{font-family:var(--serif);font-weight:500;font-size:clamp(22px,2.7vw,30px);line-height:1.32;color:var(--ink);letter-spacing:-.015em}
+  .tst-quote blockquote em{font-style:italic;color:var(--indigo)}
+  .tst-quote .who{margin-top:18px;font-weight:600;font-size:15px;color:var(--ink)}
+  .tst-quote .who small{display:block;font-weight:500;color:var(--mut);font-style:italic;margin-top:2px}
+
+  /* SCROLL PROGRESS */
+  #xp-progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:200;background:linear-gradient(90deg,var(--indigo),var(--amber))}
+
+  /* ===== EXPERIMENTAL ZONE ===== */
+  .xp-banner{max-width:var(--maxw);margin:30px auto 0;padding:13px 22px;border:1.5px dashed var(--amber-deep);border-radius:14px;background:rgba(232,154,60,.08);color:var(--amber-deep);font-size:14px;font-weight:600;text-align:center}
+  .xp-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--amber-deep);background:rgba(232,154,60,.12);border:1px solid rgba(232,154,60,.3);border-radius:999px;padding:5px 12px;margin-bottom:14px}
+  /* Feature 1 — tabbed credentials */
+  .xp-creds{position:relative;overflow:hidden;background:var(--ink);color:#fff;border-radius:28px;max-width:var(--maxw);margin:0 auto;box-shadow:var(--shadow)}
+  .xp-creds::before{content:"";position:absolute;inset:0;background:radial-gradient(680px 460px at 88% 0,rgba(99,102,241,.42),transparent 55%),radial-gradient(520px 420px at 6% 100%,rgba(232,154,60,.2),transparent 55%)}
+  .xp-creds .inner{position:relative;display:grid;grid-template-columns:.82fr 1.18fr}
+  @media(max-width:820px){.xp-creds .inner{grid-template-columns:1fr}}
+  .xp-creds .left{padding:46px 40px}
+  .xp-creds .left h3{color:#fff;font-size:clamp(27px,3.2vw,38px);font-weight:500}
+  .xp-creds .left h3 em{font-style:italic;color:#f2bd7e}
+  .xp-creds .left p{color:#cfcde9;font-size:16px;margin-top:14px}
+  .xp-tabwrap{padding:34px 40px 42px;background:rgba(255,255,255,.04);border-left:1px solid rgba(255,255,255,.1)}
+  @media(max-width:820px){.xp-tabwrap{border-left:none;border-top:1px solid rgba(255,255,255,.1)}}
+  .xp-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+  .xp-tab{font-size:13.5px;font-weight:600;color:#cfcde9;background:transparent;border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:8px 16px;cursor:pointer;transition:.2s;font-family:var(--sans)}
+  .xp-tab.active{background:#fff;color:var(--ink);border-color:#fff}
+  .xp-panel{display:none}
+  .xp-panel.active{display:block;animation:xpfade .4s ease}
+  @keyframes xpfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .xp-panel blockquote{font-family:var(--serif);font-weight:500;font-size:22px;line-height:1.32;color:#fff}
+  .xp-panel .src{margin-top:16px;font-size:14px;color:#b9b8ee}
+  .xp-panel ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+  .xp-panel li{display:flex;gap:10px;font-size:15.5px;color:#e7e6f6}
+  .xp-panel li::before{content:"—";color:#f2bd7e}
+  /* Feature 2 — count-up */
+  .xp-counts{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}
+  @media(max-width:680px){.xp-counts{grid-template-columns:1fr 1fr;gap:30px 18px}}
+  .xp-counts .n{font-family:var(--serif);font-weight:500;font-size:clamp(38px,5vw,58px);color:var(--indigo-deep);line-height:1}
+  .xp-counts .n .suf{color:var(--amber-deep)}
+  .xp-counts .l{font-size:14px;color:var(--ink-soft);margin-top:8px}
+  /* Feature 3 — FAQ */
+  .xp-faq{max-width:820px;margin:0 auto}
+  .xp-q{border-bottom:1px solid var(--line)}
+  .xp-q button{width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:22px 0;display:flex;justify-content:space-between;align-items:center;gap:20px;font-family:var(--serif);font-weight:600;font-size:clamp(18px,2.2vw,22px);color:var(--ink)}
+  .xp-q .ico{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--indigo);color:var(--indigo);display:grid;place-items:center;font-size:20px;line-height:1;transition:.3s}
+  .xp-q.open .ico{background:var(--indigo);color:#fff;transform:rotate(45deg)}
+  .xp-a{max-height:0;overflow:hidden;transition:max-height .4s ease;color:var(--ink-soft);font-size:16.5px}
+  .xp-a div{padding:0 0 22px}
+
+  /* FOOTER */
+  footer{padding:64px 0 38px;border-top:1px solid var(--line);color:var(--ink-soft);margin-top:96px}
+  .foot-grid{display:flex;justify-content:space-between;gap:36px;flex-wrap:wrap}
+  .foot-brand{max-width:300px}
+  .foot-brand .wm{font-family:var(--serif);font-weight:700;font-size:22px}
+  .foot-brand .wm b{color:var(--indigo);font-style:italic}
+  .foot-brand p{font-size:14.5px;color:var(--mut);margin-top:12px}
+  .col h4{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-bottom:14px;font-weight:700}
+  .col a{display:block;font-size:15px;margin-bottom:9px;color:var(--ink-soft)}
+  .col a:hover{color:var(--indigo)}
+  .foot-bottom{margin-top:40px;padding-top:22px;border-top:1px solid var(--line);font-size:13px;color:var(--mut);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.intro,.reveal,.step{opacity:1!important;transform:none!important}}
+</style>
+</head>
+<body>
+
+<div id="xp-progress"></div>
+
+<header>
+  <nav class="wrap">
+    <a class="brand" href="#">
+      <img src="https://www.educateuusa.org/wp-content/uploads/2026/01/edo_logo2.png" alt="Educate U" onerror="this.style.display='none'" />
+      <span class="wm">Educate<b>U</b></span>
+    </a>
+    <div class="navlinks">
+      <a href="#how">How it works</a>
+      <a href="#funding">Funding</a>
+      <a href="#students">For students</a>
+      <a href="#institutions">For universities</a>
+    </div>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="#institutions">For universities</a>
+      <a class="btn btn-pri" href="#start">Find your path</a>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <video autoplay muted loop playsinline>
+      <source src="hero-video.mp4" type="video/mp4" />
+      <source src="HyperLapse.mp4" type="video/mp4" />
+    </video>
+  </div>
+  <div class="wrap">
+    <div class="hero-left intro d2">
+      <img class="hero-logo" src="https://www.educateuusa.org/wp-content/uploads/2026/01/edo_logo2.png" alt="Educate U" />
+      <span class="kick">Real school. Real life.</span>
+      <h2>It's never <em>too late.</em></h2>
+      <p>On your schedule, on your time. We make it work for anybody.</p>
+      <a class="cue" href="#funding">Watch their stories ↓</a>
+    </div>
+    <div class="hero-card">
+      <div class="hero-pill intro d1"><span class="dotg"></span> Someone here 24/7</div>
+      <span class="eyebrow intro d1">Education that fits your life</span>
+      <h1>
+        <span class="lead intro d2">Built for</span>
+        <span class="rotline intro d2"><span class="rotword" id="rot">working parents</span></span>
+        <span class="intro d3">ready to finish their degree.</span>
+      </h1>
+      <p class="sub intro d4">Going back to school feels impossible with a job, kids, and a full plate. We make it doable — helping you find the right program, the funding you may qualify for, and the smartest path to your degree, with real people in your corner the whole way.</p>
+      <div class="hero-cta intro d5">
+        <a class="btn btn-warm" href="#start">Find your path →</a>
+        <a class="inst" href="#institutions">I'm with a university →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="mq-lbl">Trusted by leading universities</div>
+  <div class="mq-track" id="mq">
+    <span class="mq-item">Western Governors University <span>✦</span></span>
+    <span class="mq-item">National University <span>✦</span></span>
+    <span class="mq-item">Capella University <span>✦</span></span>
+    <span class="mq-item">CSU Global <span>✦</span></span>
+    <span class="mq-item">Western Governors University <span>✦</span></span>
+    <span class="mq-item">National University <span>✦</span></span>
+    <span class="mq-item">Capella University <span>✦</span></span>
+    <span class="mq-item">CSU Global <span>✦</span></span>
+  </div>
+</div>
+
+<!-- HOW WE HELP -->
+<section class="block" id="how">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">How we help you</span>
+      <h2>A clear path back to school — <em>one step at a time</em></h2>
+      <p>No guesswork, no runaround. Here's exactly how we get you from "I wish I could" to enrolled.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-no">01</div>
+        <div>
+          <h3>Find the right program</h3>
+          <p>We match you to flexible, online, accredited programs built for real schedules — for working parents, full-time jobs, and anyone who can't get to a campus.</p>
+          <div class="tags"><span class="tag">100% online options</span><span class="tag">Flexible pacing</span><span class="tag">Best-fit, not any-fit</span></div>
+        </div>
+        <div class="step-art"><img src="edu-step1-program.png" alt="Adult student studying at home" loading="lazy" /></div>
+      </div>
+      <div class="step">
+        <div class="step-no">02</div>
+        <div>
+          <h3>Unlock your funding</h3>
+          <p>We walk you through the grants and loan-forgiveness programs you may qualify for — so cost stops being the reason you put it off another year.</p>
+          <div class="tags"><span class="tag">Grants</span><span class="tag">Loan forgiveness*</span><span class="tag">Plain-English help</span></div>
+        </div>
+        <div class="step-art"><img src="edu-step2-funding.png" alt="Advisor helping a student review funding paperwork" loading="lazy" /></div>
+      </div>
+      <div class="step">
+        <div class="step-no">03</div>
+        <div>
+          <h3>Choose the right accreditation</h3>
+          <p>Not all degrees carry the same weight. We point you to the accreditations that actually matter for your goals — so your time and money count.</p>
+          <div class="tags"><span class="tag">Goal-aligned</span><span class="tag">Recognized</span><span class="tag">No dead ends</span></div>
+        </div>
+        <div class="step-art"><img src="edu-step3-accreditation.png" alt="Graduation cap and diploma" loading="lazy" /></div>
+      </div>
+      <div class="step">
+        <div class="step-no">04</div>
+        <div>
+          <h3>Support that's actually there</h3>
+          <p>Real answers whenever you need them — day or night. No chasing people down, no phone-tag, no being passed around. Just someone who knows your situation.</p>
+          <div class="tags"><span class="tag">24/7 access</span><span class="tag">Real people</span><span class="tag">Always responsive</span></div>
+        </div>
+        <div class="step-art"><img src="edu-step4-support.png" alt="Friendly support specialist on a call" loading="lazy" /></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DUAL AUDIENCE -->
+<section class="block dual" id="students">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow" style="justify-content:center">One partner, two wins</span>
+      <h2>Great for students. <em>Great for the schools</em> that serve them.</h2>
+      <p>The same warmth, whichever side you're on.</p>
+    </div>
+    <div class="dual-grid">
+      <div class="dcard feat reveal">
+        <div class="who">For students</div>
+        <h3>Your degree, on your terms</h3>
+        <p>You bring the goal. We bring the map — the right program, the funding, the path, and the support to actually get there.</p>
+        <ul>
+          <li>Programs that fit your real life</li>
+          <li>Help finding grants &amp; forgiveness you may qualify for</li>
+          <li>Guidance on the accreditations that matter</li>
+          <li>Answers 24/7 — no phone-tag, ever</li>
+        </ul>
+        <a class="more" href="#start">Find your path →</a>
+      </div>
+      <div class="dcard reveal" id="institutions">
+        <div class="who">For universities</div>
+        <h3>Help more students cross the finish line</h3>
+        <p>We pair smart automation with trained human specialists to reach, support, and re-engage learners — so more of your prospective students enroll and complete. It's student success, fully managed.</p>
+        <ul>
+          <li>AI + human support across the enrollment journey</li>
+          <li>Re-engage students already in your pipeline</li>
+          <li>Document &amp; admissions workflows handled</li>
+          <li>Outcomes owned end-to-end — not just software</li>
+        </ul>
+        <a class="more" href="#start">Talk to our team →</a>
+      </div>
+    </div>
+    <div class="stats reveal">
+      <div class="stat"><div class="n">10,000<em>+</em></div><div class="l">Students enrolled / month</div></div>
+      <div class="stat"><div class="n">33<em>%</em></div><div class="l">Average conversion lift</div></div>
+      <div class="stat"><div class="n">10<em>×</em></div><div class="l">Faster student outreach</div></div>
+      <div class="stat"><div class="n">4<em>+</em></div><div class="l">Leading university partners</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- REAL STORIES — testimonial UGC videos, alternating side-slide -->
+<section class="block tst" id="funding">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow" style="justify-content:center">Real stories</span>
+      <h2>Going back to school shouldn't be this hard — <em>here's proof it doesn't have to be.</em></h2>
+      <p>Real people who were sure they couldn't. Then they did.</p>
+    </div>
+    <div class="tst-rows">
+
+      <!-- Row 1 · Mom — video LEFT, quote RIGHT (slides in from the left) -->
+      <div class="tst-row">
+        <div class="tst-video">
+          <video class="tst-v" playsinline controls preload="metadata" poster="testimonial-mom-poster.jpg"><source src="testimonial-mom.mp4" type="video/mp4" /></video>
+          <div class="tst-ph"><span class="pl"></span><b>Maria's story</b><small>add testimonial-mom.mp4</small></div>
+        </div>
+        <div class="tst-quote">
+          <span class="qmark">"</span>
+          <blockquote>I actually <em>did it</em> — cap, gown, the whole thing. If you're sitting there thinking there's no way… there is. You just have to start.</blockquote>
+          <div class="who">Maria T.<small>Single mom · B.S. graduate</small></div>
+        </div>
+      </div>
+
+      <!-- Row 2 · Truck driver — video RIGHT, quote LEFT (slides in from the right) -->
+      <div class="tst-row">
+        <div class="tst-video">
+          <video class="tst-v" playsinline controls preload="metadata" poster="testimonial-trucker-poster.jpg"><source src="testimonial-trucker.mp4" type="video/mp4" /></video>
+          <div class="tst-ph"><span class="pl"></span><b>Dale's story</b><small>add testimonial-trucker.mp4</small></div>
+        </div>
+        <div class="tst-quote">
+          <span class="qmark">"</span>
+          <blockquote>You can be busy and get it done, or busy and <em>not</em> get it done. Either way… you're gonna be busy.</blockquote>
+          <div class="who">Dale R.<small>Earned his degree from the road</small></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="block quote">
+  <div class="wrap reveal">
+    <span class="mk">"</span>
+    <blockquote>One of the best partnership decisions we've made — they helped us reach and re-engage students we'd nearly given up on, and the results speak for themselves.</blockquote>
+    <div class="by">Enrollment Leadership · <b>Western Governors University</b></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     EXPERIMENTAL ZONE — 3 EXTRA FEATURES FOR RYAN TO REVIEW
+     Keep what you like; tell me to cut the rest. Remove this
+     whole block (and the .xp- styles + xp script) before launch.
+============================================================= -->
+<div class="xp-banner">Experimental zone — 3 extra reference-inspired features below to review. Keep the ones you like; tell me to cut the rest.</div>
+
+<!-- FEATURE 1 · Tabbed credentials card (Lounge Lizard "Street Cred" pattern) -->
+<section class="block">
+  <div class="xp-creds reveal">
+    <div class="inner">
+      <div class="left">
+        <span class="xp-tag">Feature 1 · Tabbed credentials</span>
+        <h3>Why people <em>trust us</em></h3>
+        <p>Flip between the proof that matters most to you.</p>
+      </div>
+      <div class="xp-tabwrap">
+        <div class="xp-tabs">
+          <button class="xp-tab active" data-p="xp1">Student wins</button>
+          <button class="xp-tab" data-p="xp2">University partners</button>
+          <button class="xp-tab" data-p="xp3">What we do</button>
+        </div>
+        <div class="xp-panel active" id="xp1">
+          <blockquote>"I didn't think I had the time — single mom, full-time job. They found the program and the funding, and walked me all the way to graduation."</blockquote>
+          <div class="src">— Maria T., B.S. graduate</div>
+        </div>
+        <div class="xp-panel" id="xp2">
+          <ul>
+            <li>Western Governors University</li>
+            <li>National University</li>
+            <li>Capella University</li>
+            <li>CSU Global</li>
+          </ul>
+        </div>
+        <div class="xp-panel" id="xp3">
+          <ul>
+            <li>Match you to the right flexible, accredited program</li>
+            <li>Map the grants &amp; forgiveness you may qualify for</li>
+            <li>Guide you to accreditations that actually count</li>
+            <li>Support you 24/7 with real people</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE 2 · Animated count-up stats -->
+<section class="block" style="padding-top:0">
+  <div class="wrap" style="text-align:center"><span class="xp-tag">Feature 2 · Animated counters</span></div>
+  <div class="xp-counts reveal" id="xp-counts">
+    <div><div class="n" data-to="10000" data-suf="+">0</div><div class="l">Students enrolled / month</div></div>
+    <div><div class="n" data-to="33" data-suf="%">0</div><div class="l">Average conversion lift</div></div>
+    <div><div class="n" data-to="24" data-suf="/7">0</div><div class="l">Real human support</div></div>
+    <div><div class="n" data-to="4" data-suf="+">0</div><div class="l">University partners</div></div>
+  </div>
+</section>
+
+<!-- FEATURE 3 · FAQ accordion -->
+<section class="block" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head center reveal" style="margin-bottom:28px">
+      <span class="xp-tag">Feature 3 · FAQ accordion</span>
+      <h2>Common <em>questions</em></h2>
+    </div>
+    <div class="xp-faq reveal">
+      <div class="xp-q"><button>Do I have to go to a campus? <span class="ico">+</span></button><div class="xp-a"><div>No. We specialize in flexible, fully-online, accredited programs built for people with jobs, kids, and full schedules.</div></div></div>
+      <div class="xp-q"><button>What's it going to cost me? <span class="ico">+</span></button><div class="xp-a"><div>It depends on your situation — and that's exactly what we help with. We walk you through the grants and loan-forgiveness programs you may qualify for before you commit to anything.</div></div></div>
+      <div class="xp-q"><button>How do I know the degree is legit? <span class="ico">+</span></button><div class="xp-a"><div>We point you to programs with the accreditations that actually matter for your goals, so your time and money count.</div></div></div>
+      <div class="xp-q"><button>What if I get stuck or have questions? <span class="ico">+</span></button><div class="xp-a"><div>You'll have real people to talk to, 24/7 — no phone-tag, no being passed around.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="wrap" id="start">
+  <div class="cta-final reveal">
+    <h2>Ready to take <em>the next step?</em></h2>
+    <p>Whether you're a student ready to go back, or a university ready to help more of them — let's map it out together.</p>
+    <div class="row">
+      <a class="btn btn-warm" href="#">Get started →</a>
+      <a class="btn btn-light" href="tel:+18883384872">Talk to us — (888) 338-4872</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOUNDER -->
+<section class="block founder">
+  <div class="wrap reveal">
+    <span class="eyebrow">Why we exist</span>
+    <span class="mk">"</span>
+    <blockquote>I didn't start Educate&nbsp;U to enroll students — I started it to <em>change lives.</em> I kept meeting smart, hard-working people who'd given up on school because the system was built for someone else's life, not theirs. So we built a different way — one that meets you where you are and finds the path that's actually right for <em>you.</em> Everybody deserves a shot at more, no matter how busy life gets.</blockquote>
+    <div class="by">
+      <img class="avatar" src="jeremy-founder.jpg" alt="Jeremy Flores" />
+      <div class="who"><span class="name">Jeremy Flores</span><small>Founder, Educate U</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="wm">Educate<b>U</b></div>
+        <p>Helping working adults go back to school — the right program, the funding, and the support to finish.</p>
+      </div>
+      <div class="col">
+        <h4>Explore</h4>
+        <a href="#how">How it works</a>
+        <a href="#funding">Funding &amp; grants</a>
+        <a href="#students">For students</a>
+        <a href="#institutions">For universities</a>
+      </div>
+      <div class="col">
+        <h4>Company</h4>
+        <a href="#">About us</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy policy</a>
+        <a href="#">Terms</a>
+      </div>
+      <div class="col">
+        <h4>Reach us</h4>
+        <a href="tel:+18883384872">(888) 338-4872</a>
+        <a href="#">2625 E. Camelback Rd, Ste 342<br/>Phoenix, AZ 85016</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© Educate U. All rights reserved.</span>
+      <span>*Funding &amp; forgiveness eligibility varies — we'll help you check what you qualify for.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Rotating hero word — brush script, brand-color cycle, left-to-right "written" reveal
+  (function(){
+    const words=[
+      {t:"working parents",   c:"#4F46E9"}, // indigo
+      {t:"full-time workers", c:"#14B8A6"}, // teal
+      {t:"career-changers",   c:"#E8765A"}, // rose
+      {t:"veterans",          c:"#E89A3C"}, // amber
+      {t:"busy adults",       c:"#EC4899"}, // pink
+      {t:"second-chancers",   c:"#6366F1"}  // indigo-2
+    ];
+    const el=document.getElementById('rot');let i=0;
+    function write(w){
+      el.classList.remove('writing');
+      el.textContent=w.t; el.style.color=w.c;
+      void el.offsetWidth;            // force reflow so the animation restarts
+      el.classList.add('writing');
+    }
+    write(words[0]);
+    setInterval(()=>{ i=(i+1)%words.length; write(words[i]); },2800);
+  })();
+  // Scroll reveals + side-slide steps
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.16});
+  document.querySelectorAll('.reveal,.step,.tst-row').forEach(n=>io.observe(n));
+
+  // Testimonial videos: hide the placeholder card once a real video file loads
+  document.querySelectorAll('.tst-v').forEach(v=>{
+    const show=()=>v.closest('.tst-video').classList.add('has-video');
+    v.addEventListener('loadeddata',show);
+    if(v.readyState>=2)show();
+  });
+
+  // ===== Polish: top scroll-progress bar =====
+  (function(){
+    const bar=document.getElementById('xp-progress');
+    const upd=()=>{const h=document.documentElement;const sc=h.scrollTop||document.body.scrollTop;
+      const max=(h.scrollHeight-h.clientHeight)||1;bar.style.width=(sc/max*100)+'%';};
+    window.addEventListener('scroll',upd,{passive:true});window.addEventListener('resize',upd);upd();
+  })();
+
+  // ===== Feature 1: tabbed credentials =====
+  document.querySelectorAll('.xp-tab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      const wrap=t.closest('.xp-tabwrap');
+      wrap.querySelectorAll('.xp-tab').forEach(x=>x.classList.remove('active'));
+      wrap.querySelectorAll('.xp-panel').forEach(p=>p.classList.remove('active'));
+      t.classList.add('active');
+      document.getElementById(t.dataset.p).classList.add('active');
+    });
+  });
+
+  // ===== Feature 2: count-up on scroll =====
+  (function(){
+    const grid=document.getElementById('xp-counts');if(!grid)return;
+    let done=false;
+    const run=()=>{grid.querySelectorAll('.n').forEach(el=>{
+      const to=+el.dataset.to,suf=el.dataset.suf||'',dur=1400,t0=performance.now();
+      const fmt=v=>Math.round(v).toLocaleString();
+      const step=now=>{const p=Math.min((now-t0)/dur,1),e=1-Math.pow(1-p,3);
+        el.innerHTML=fmt(to*e)+'<span class="suf">'+suf+'</span>';
+        if(p<1)requestAnimationFrame(step);};
+      requestAnimationFrame(step);});};
+    const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&!done){done=true;run();o.disconnect();}}),{threshold:.4});
+    o.observe(grid);
+  })();
+
+  // ===== Feature 3: FAQ accordion =====
+  document.querySelectorAll('.xp-q button').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const q=b.parentElement,a=b.nextElementSibling,open=q.classList.contains('open');
+      q.classList.toggle('open');b.querySelector('.ico').textContent=open?'+':'+';
+      a.style.maxHeight=open?null:a.scrollHeight+'px';
+    });
+  });
+</script>
+</body>
+</html>
