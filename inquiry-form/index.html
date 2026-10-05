@@ -1,0 +1,366 @@
+<title>Enrollment Inquiry Form</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a mock program page (what a learner sees) beside a live "what lands in Salesforce" panel for the demo. */
+:root{
+  --bg:#f6f5f2; --surface:#ffffff; --fg:#17202b; --muted:#5d6672; --line:#e1dfd9;
+  --ink:#0f2a4a; --accent:#c8552a; --accent-fg:#ffffff; --ok:#1d7a4b; --warn:#9a6a00; --soft:#eef3f8;
+  --display:"Newsreader",Georgia,serif; --body:"Figtree",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121518; --surface:#1b1f24; --fg:#e8e6e1; --muted:#9aa3ad; --line:#2d333b;
+  --ink:#dbe6f3; --accent:#e8784a; --accent-fg:#1a1a1a; --ok:#5fcf8f; --warn:#e2b84a; --soft:#20262e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121518; --surface:#1b1f24; --fg:#e8e6e1; --muted:#9aa3ad; --line:#2d333b;
+  --ink:#dbe6f3; --accent:#e8784a; --accent-fg:#1a1a1a; --ok:#5fcf8f; --warn:#e2b84a; --soft:#20262e; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important} /* .f{display:grid} would otherwise beat the hidden attribute */
+body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--body);padding-block:0 48px;padding-inline:16px}
+a{color:inherit}
+.wrap{max-width:1140px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;font-weight:600;letter-spacing:.01em}
+.brand .mark{width:30px;height:30px;border-radius:7px;background:var(--ink);display:grid;place-items:center;color:var(--bg);font-family:var(--display);font-size:18px}
+.brand small{font-weight:500;color:var(--muted)}
+.tag{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:40px;padding-top:36px}
+@media (max-width:860px){.grid{grid-template-columns:1fr;gap:28px}}
+h1{font:500 clamp(30px,4vw,42px)/1.1 var(--display);margin:8px 0 10px;text-wrap:balance;color:var(--ink)}
+.lede{color:var(--muted);max-width:60ch;margin:0 0 20px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:0 0 24px;padding:0;list-style:none}
+.facts li{border-top:2px solid var(--line);padding-top:8px}
+.facts b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.facts span{font-size:13px;color:var(--muted)}
+.enroll{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:8px;font-weight:600;text-decoration:none}
+.enroll + .or{color:var(--muted);font-size:14px;margin-left:14px}
+
+/* The embed */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 12px 32px -20px rgba(15,42,74,.25)}
+.card h2{font:500 26px/1.15 var(--display);margin:0 0 4px;color:var(--ink);text-wrap:balance}
+.card .sub{color:var(--muted);font-size:14px;margin:0 0 18px}
+.f{display:grid;gap:14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:480px){.row{grid-template-columns:1fr}}
+label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
+label .opt{color:var(--muted);font-weight:500}
+input[type=text],input[type=email],input[type=tel],select,textarea{width:100%;min-height:44px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);font:inherit}
+textarea{min-height:84px;resize:vertical}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,.chk:focus-within{outline:3px solid color-mix(in srgb,var(--accent) 55%,transparent);outline-offset:2px}
+.err{color:#b3261e;font-size:13px;margin-top:4px}
+[data-theme="dark"] .err{color:#ff8a80}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .err{color:#ff8a80}}
+fieldset{border:0;padding:0;margin:0}
+legend{font-size:13px;font-weight:600;margin-bottom:8px;padding:0}
+.consent{background:var(--soft);border-radius:10px;padding:14px;display:grid;gap:10px}
+.consent .why{font-size:13px;color:var(--muted);margin:0}
+.chk{display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:start;font-size:13.5px;line-height:1.45;border-radius:6px}
+.chk input{width:24px;height:24px;margin:1px 0 0;accent-color:var(--accent)}
+.fine{font-size:12px;color:var(--muted);margin:0}
+.btn{min-height:48px;border:0;border-radius:8px;background:var(--accent);color:var(--accent-fg);font:600 16px var(--body);padding:0 20px;cursor:pointer}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.notice{font-size:12.5px;color:var(--muted);margin:0}
+.hp{position:absolute;left:-9999px;opacity:0;height:0;width:0}
+.minor{background:var(--soft);border-radius:10px;padding:16px;display:grid;gap:8px}
+.minor p{margin:0}
+.gate{display:grid;gap:10px;text-align:center;padding:22px 10px}
+.gate p{margin:0;color:var(--muted);font-size:14px}
+.done{display:grid;gap:10px}
+.done h3{font:500 24px var(--display);margin:0;color:var(--ink)}
+.done p{margin:0}
+
+/* Demo panel */
+.panel{position:sticky;top:env(safe-area-inset-top,0px);display:grid;gap:14px}
+.panel h3{margin:0;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pill{font:500 11px var(--body);letter-spacing:.04em;padding:3px 8px;border-radius:999px;background:var(--soft);color:var(--muted);text-transform:none}
+.pill.on{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
+.rec{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.rec table{width:100%;border-collapse:collapse;font-size:13px}
+.rec td{padding:8px 12px;border-top:1px solid var(--line);vertical-align:top;word-break:break-word}
+.rec tr:first-child td{border-top:0}
+.rec td:first-child{color:var(--muted);width:42%;font-family:var(--mono);font-size:12px}
+.rec td.v{font-variant-numeric:tabular-nums}
+.rec .empty{color:var(--muted);font-style:italic}
+.rec .yes{color:var(--ok);font-weight:600}.rec .no{color:var(--muted)}
+.steps{margin:0;padding-left:18px;font-size:13.5px;color:var(--muted);display:grid;gap:6px}
+.steps b{color:var(--fg)}
+.foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px 24px}
+code{font-family:var(--mono);font-size:.92em}
+@media (prefers-reduced-motion:no-preference){.card,.rec{transition:box-shadow .2s}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><span class="mark">U</span><span>Partner University <small>· with Pearson</small></span></div>
+    <span class="tag">Professional Certificates</span>
+  </header>
+
+  <main class="grid">
+    <section>
+      <span class="tag">Example program page</span>
+      <h1>Data Analytics Professional Certificate</h1>
+      <p class="lede">Twelve weeks, fully online, taught by Partner University faculty. Learn SQL, Tableau and the analysis habits employers test for, with a graded capstone you can show in interviews.</p>
+      <ul class="facts">
+        <li><b>$2,400</b><span>or 4 payments of $600</span></li>
+        <li><b>Jan 12</b><span>next start date</span></li>
+        <li><b>12 wks</b><span>6–8 hrs per week</span></li>
+        <li><b>Grants</b><span>available for eligible learners</span></li>
+      </ul>
+      <p><a class="enroll" href="#enroll">Enroll now</a><span class="or">or ask a question first ↓</span></p>
+
+      <!-- ===== THE EMBED. Everything inside #eu-inquiry is what goes on the partner page. ===== -->
+      <div class="card" id="eu-inquiry" style="margin-top:28px">
+        <div id="gate" class="gate" hidden>
+          <p>Waiting for your cookie preferences.</p>
+          <p class="fine">This form loads only after the consent banner has an answer.</p>
+        </div>
+
+        <form id="inq" class="f" novalidate autocomplete="on">
+          <h2>Have a question before you enroll?</h2>
+          <p class="sub">An enrollment advisor answers within one business day. No commitment.</p>
+
+          <div class="hp" aria-hidden="true"><label for="website">Website</label><input type="text" id="website" name="website" tabindex="-1" autocomplete="off"></div>
+
+          <div>
+            <label for="yob">Year you were born</label>
+            <select id="yob" name="yob" required autocomplete="bday-year"><option value="">Select year</option></select>
+            <div class="err" id="e-yob" aria-live="polite"></div>
+          </div>
+
+          <div id="under13" class="minor" hidden>
+            <p><b>Thanks for your interest.</b> For learners under 13, a parent or guardian requests information on your behalf.</p>
+            <p class="fine">Share this page with them, or have them call the advising line shown at the bottom of the page. We did not save anything you entered.</p>
+          </div>
+
+          <div id="parent" class="f" hidden>
+            <div class="minor">
+              <p><b>Under 18? We'll send the details to a parent or guardian.</b></p>
+              <p class="fine">They get one email about this program with a link to ask their own questions. We do not save your name, email or birth year, and we will not contact you directly.</p>
+            </div>
+            <div class="row">
+              <div><label for="pfn">Parent or guardian's first name</label><input type="text" id="pfn" autocomplete="off"><div class="err" id="e-pfn" aria-live="polite"></div></div>
+              <div><label for="pln">Their last name</label><input type="text" id="pln" autocomplete="off"><div class="err" id="e-pln" aria-live="polite"></div></div>
+            </div>
+            <div><label for="pem">Their email</label><input type="email" id="pem" autocomplete="off" inputmode="email"><div class="err" id="e-pem" aria-live="polite"></div></div>
+            <p class="fine">Please use a parent or guardian's email, not your own. They can unsubscribe from that one email, and nothing is sent to anyone else until they ask for it. Not a condition of purchase.</p>
+            <button class="btn" type="submit">Send to my parent or guardian</button>
+          </div>
+
+          <div id="body" hidden class="f">
+            <div class="row">
+              <div><label for="fn">First name</label><input type="text" id="fn" name="first_name" required autocomplete="given-name"><div class="err" id="e-fn" aria-live="polite"></div></div>
+              <div><label for="ln">Last name</label><input type="text" id="ln" name="last_name" required autocomplete="family-name"><div class="err" id="e-ln" aria-live="polite"></div></div>
+            </div>
+            <div class="row">
+              <div><label for="em">Email</label><input type="email" id="em" name="email" required autocomplete="email" inputmode="email"><div class="err" id="e-em" aria-live="polite"></div></div>
+              <div><label for="ph">Mobile phone <span class="opt">(optional)</span></label><input type="tel" id="ph" name="phone" autocomplete="tel" inputmode="tel"><div class="err" id="e-ph" aria-live="polite"></div></div>
+            </div>
+            <div>
+              <label for="q">What would you like to know?</label>
+              <select id="q" name="question" required>
+                <option value="">Choose one</option>
+                <option>Start dates and schedule</option>
+                <option>Payment plan options</option>
+                <option>Grants and funding</option>
+                <option>What the course platform is like</option>
+                <option>Assignments and time commitment</option>
+                <option>Something else</option>
+              </select>
+              <div class="err" id="e-q" aria-live="polite"></div>
+            </div>
+            <div><label for="msg">Anything else? <span class="opt">(optional)</span></label><textarea id="msg" name="description" maxlength="600"></textarea></div>
+
+            <fieldset class="consent">
+              <legend>How may we reach you?</legend>
+              <p class="why">Check only the ways you want. None of these are required to enroll.</p>
+              <label class="chk"><input type="checkbox" id="c-email" name="consent_email"><span>Email me about this program, start dates and funding options from <b class="seller"></b>. I can unsubscribe at any time.</span></label>
+              <label class="chk"><input type="checkbox" id="c-sms" name="consent_sms"><span>Text me at the mobile number above. Messages may be sent by <b class="seller"></b> using an automated system. Msg &amp; data rates may apply. Reply STOP to end.</span></label>
+              <label class="chk"><input type="checkbox" id="c-call" name="consent_call"><span>Call me at the number above. Calls may be placed by <b class="seller"></b> using an autodialer or prerecorded voice.</span></label>
+              <p class="fine">Consent is not a condition of purchase. Your information is handled under the privacy notice linked on this page. Consent text version <code id="cv"></code>.</p>
+              <div class="err" id="e-consent" aria-live="polite"></div>
+            </fieldset>
+
+            <button class="btn" type="submit" id="go">Send my question</button>
+            <p class="notice" id="gpc" hidden>Your browser sent a Global Privacy Control signal. We honored it: your information will not be sold or shared for advertising.</p>
+          </div>
+        </form>
+
+        <div id="done" class="done" hidden>
+          <h3>Got it. An advisor will reach out within one business day.</h3>
+          <p id="done-how"></p>
+          <p class="fine">Reference <code id="done-ref"></code></p>
+        </div>
+      </div>
+      <!-- ===== end embed ===== -->
+    </section>
+
+    <aside class="panel" aria-label="What lands in Salesforce">
+      <h3>Lead record, as it lands in Salesforce <span class="pill" id="mode">demo mode</span></h3>
+      <div class="rec"><table id="lead"></table></div>
+      <h3>Consent receipt <span class="pill" id="rstate">not yet given</span></h3>
+      <div class="rec"><table id="receipt"></table></div>
+      <h3>Why it's built this way</h3>
+      <ol class="steps">
+        <li><b>Loads after the cookie banner says yes.</b> On a page with OneTrust, nothing renders until the chosen category is granted. Consent given after recording starts does not count.</li>
+        <li><b>Age before name.</b> A neutral year-of-birth question comes first. Under 13 stops. 13–17 goes to a parent path: the parent's name and email become the lead, flagged <code>on_behalf_of_minor</code>, email-only until the parent gives their own consent. The learner's identity and birth year are never stored, and ad click IDs are dropped on that path.</li>
+        <li><b>Three unchecked boxes, named sender, not a condition of purchase.</b> Email, text and call consent are separate, so reps only call people who said "call me."</li>
+        <li><b>The receipt rides with the lead.</b> Wording version, timestamp, page, checkbox state, GPC signal. Stored on the Salesforce record, not only in a vendor log.</li>
+        <li><b>Straight to Salesforce.</b> Web-to-Lead post, no middleman. Set the org ID and field IDs in the config block and it goes live.</li>
+      </ol>
+    </aside>
+  </main>
+
+  <footer class="foot">
+    <span>Advising line: <b>(000) 000-0000</b></span>
+    <span>Example page. Program, pricing and names are placeholders.</span>
+  </footer>
+</div>
+
+<script>
+// ===== CONFIG: the only thing to edit when the Salesforce org exists =====
+const CONFIG = {
+  oid: "",                               // Salesforce org ID from Setup → Web-to-Lead. Empty = demo mode.
+  retURL: "https://example.edu/thanks",  // where Salesforce redirects after a live post
+  seller: "EducateU, on behalf of Partner University",
+  school: "Partner University",
+  program: "Data Analytics Professional Certificate",
+  consentVersion: "2026-10-02.v1",
+  consentGroup: "C0003",                 // OneTrust category the form is gated on (C0003 = Functional). Match Pearson's setup.
+  // Web-to-Lead custom field IDs (look like 00N5e00000AbCdE). Create these on the Lead object, paste the IDs here.
+  fields: { school:"00N_SCHOOL", program:"00N_PROGRAM", question:"00N_QUESTION", yob:"00N_YOB",
+            consent_email:"00N_C_EMAIL", consent_sms:"00N_C_SMS", consent_call:"00N_C_CALL",
+            consent_version:"00N_C_VERSION", consent_at:"00N_C_AT", consent_text:"00N_C_TEXT",
+            page_url:"00N_PAGE", gpc:"00N_GPC", utm:"00N_UTM", click_id:"00N_CLICKID", ua:"00N_UA", ref:"00N_REF",
+            on_behalf_of_minor:"00N_MINOR" }
+};
+const PARENT_NOTICE = "Inquiry submitted by a learner aged 13–17 on behalf of this parent/guardian. One informational email permitted (CAN-SPAM: labeled, opt-out, postal address). No calls or texts, no further marketing, until the parent completes their own form and consents. Learner identity not collected.";
+// ponytail: single file, no deps. Web-to-Lead is a form POST (no CORS), so a live submit builds a hidden form and submits it.
+
+const $ = s => document.querySelector(s);
+const DEMO = !CONFIG.oid;
+const form = $("#inq"), body = $("#body"), gate = $("#gate");
+let path = ""; // "" | "under13" | "parent" | "adult"
+document.querySelectorAll(".seller").forEach(e => e.textContent = CONFIG.seller);
+$("#cv").textContent = CONFIG.consentVersion;
+$("#mode").textContent = DEMO ? "demo mode" : "live";
+if (!DEMO) $("#mode").classList.add("on");
+
+// Year of birth: neutral list, no default, newest first.
+const yob = $("#yob"), thisYear = new Date().getFullYear();
+for (let y = thisYear; y >= thisYear - 100; y--) yob.add(new Option(y, y));
+
+// --- OneTrust gate: render only once the category is granted. No OneTrust on the page = render (dev/demo). ---
+function granted(){
+  const g = window.OnetrustActiveGroups; // e.g. ",C0001,C0003,"
+  return typeof g !== "string" ? true : g.split(",").includes(CONFIG.consentGroup);
+}
+function applyGate(){ const ok = granted(); gate.hidden = ok; form.hidden = !ok; }
+window.addEventListener("OneTrustGroupsUpdated", applyGate);
+applyGate();
+
+// --- Context captured at submit time, not from cookies (Safari caps those at 1–7 days). ---
+const qs = new URLSearchParams(location.search);
+const ctx = {
+  page_url: location.href.split("#")[0],
+  ref: document.referrer || "",
+  utm: ["utm_source","utm_medium","utm_campaign","utm_term","utm_content"].filter(k=>qs.get(k)).map(k=>k+"="+qs.get(k)).join("&"),
+  click_id: ["gclid","fbclid","msclkid","ttclid"].filter(k=>qs.get(k)).map(k=>k+"="+qs.get(k)).join("&"),
+  gpc: navigator.globalPrivacyControl === true,
+  ua: navigator.userAgent
+};
+if (ctx.gpc) $("#gpc").hidden = false;
+
+// --- Age routing ---
+yob.addEventListener("change", () => {
+  const y = yob.value, age = thisYear - Number(y);
+  path = !y ? "" : age < 13 ? "under13" : age < 18 ? "parent" : "adult";
+  form.reset(); yob.value = path === "under13" ? "" : y;   // nothing typed carries across branches; under-13 keeps nothing at all
+  $("#under13").hidden = path !== "under13"; $("#parent").hidden = path !== "parent"; body.hidden = path !== "adult";
+  $("#e-yob").textContent = "";
+  render();
+});
+
+// --- Live preview of the Lead record ---
+const v = id => $("#"+id).value.trim();
+const on = id => $("#"+id).checked;
+function consentText(){
+  return [...document.querySelectorAll(".chk")].map(l => (l.querySelector("input").checked ? "[x] " : "[ ] ") + l.querySelector("span").textContent).join("\n")
+       + "\nConsent is not a condition of purchase.";
+}
+function payload(){
+  if (path === "parent") return {   // parent is the lead; the learner's yob, name and contact never leave the browser
+    first_name: v("pfn"), last_name: v("pln"), email: v("pem"), phone: "",
+    school: CONFIG.school, program: CONFIG.program, question: "", description: "", yob: "", on_behalf_of_minor: true,
+    consent_email: false, consent_sms: false, consent_call: false,
+    consent_version: CONFIG.consentVersion, consent_at: "", consent_text: PARENT_NOTICE,
+    ...ctx, click_id: "", lead_source: "Program page inquiry (parent of under-18)"
+  };
+  const anyConsent = on("c-email")||on("c-sms")||on("c-call");
+  return {
+    first_name: v("fn"), last_name: v("ln"), email: v("em"), phone: v("ph"),
+    school: CONFIG.school, program: CONFIG.program, question: v("q"), description: v("msg"), yob: v("yob"),
+    consent_email: on("c-email"), consent_sms: on("c-sms"), consent_call: on("c-call"),
+    consent_version: CONFIG.consentVersion, consent_at: anyConsent ? new Date().toISOString() : "",
+    consent_text: consentText(), ...ctx, on_behalf_of_minor: false, lead_source: "Program page inquiry"
+  };
+}
+function row(k, val){
+  const cls = val === true ? "yes" : val === false ? "no" : "";
+  const txt = val === true ? "Yes" : val === false ? "No" : (val || "");
+  return `<tr><td>${k}</td><td class="v ${cls}">${txt ? esc(txt) : '<span class="empty">empty</span>'}</td></tr>`;
+}
+const esc = s => String(s).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+function render(){
+  const p = payload();
+  $("#lead").innerHTML = ["first_name","last_name","email","phone","school","program","question","description","yob","on_behalf_of_minor","lead_source"].map(k=>row(k,p[k])).join("");
+  $("#receipt").innerHTML = ["consent_email","consent_sms","consent_call","consent_version","consent_at","page_url","gpc","utm","click_id"].map(k=>row(k,p[k])).join("");
+  const any = p.consent_email||p.consent_sms||p.consent_call;
+  $("#rstate").textContent = path === "parent" ? "not asked: parent consents on their own form" : any ? "captured" : "not yet given";
+  $("#rstate").classList.toggle("on", !!any);
+}
+form.addEventListener("input", render); render();
+
+// --- Validation + submit ---
+function check(){
+  let ok = true; const set = (id,m) => { $("#"+id).textContent = m; if (m) ok = false; };
+  set("e-yob", v("yob") ? "" : "Select the year you were born.");
+  if (path === "parent") {
+    set("e-pfn", v("pfn") ? "" : "Enter their first name.");
+    set("e-pln", v("pln") ? "" : "Enter their last name.");
+    set("e-pem", /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v("pem")) ? "" : "Enter a valid email address for your parent or guardian.");
+    return ok;
+  }
+  set("e-fn", v("fn") ? "" : "Enter your first name.");
+  set("e-ln", v("ln") ? "" : "Enter your last name.");
+  set("e-em", /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v("em")) ? "" : "Enter a valid email address.");
+  set("e-q", v("q") ? "" : "Choose a question.");
+  const needsPhone = on("c-sms")||on("c-call");
+  set("e-ph", needsPhone && v("ph").replace(/\D/g,"").length < 10 ? "Enter a mobile number to receive texts or calls." : "");
+  set("e-consent", (on("c-email")||on("c-sms")||on("c-call")) ? "" : "Choose at least one way for an advisor to reply.");
+  return ok;
+}
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  if ($("#website").value) return;            // honeypot
+  if (!check()) { form.querySelector(".err:not(:empty)")?.previousElementSibling?.focus?.(); return; }
+  const p = payload(); render();
+  const how = path === "parent" ? "one email to " + p.first_name
+            : [p.consent_email&&"email", p.consent_sms&&"text", p.consent_call&&"phone"].filter(Boolean).join(", ");
+  const ref = CONFIG.consentVersion + "-" + Date.now().toString(36);
+  if (DEMO) { done(how, ref); return; }
+  // Live: post to Web-to-Lead with the custom field IDs from CONFIG.
+  const f = document.createElement("form"); f.method = "POST"; f.action = "https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8"; f.hidden = true;
+  const add = (n, val) => { const i = document.createElement("input"); i.name = n; i.value = val === true ? "1" : val === false ? "0" : (val ?? ""); f.appendChild(i); };
+  add("oid", CONFIG.oid); add("retURL", CONFIG.retURL);
+  ["first_name","last_name","email","phone","description","lead_source"].forEach(k => add(k, p[k]));
+  Object.entries(CONFIG.fields).forEach(([k,id]) => add(id, p[k]));
+  document.body.appendChild(f); f.submit();
+});
+function done(how, ref){
+  form.hidden = true; $("#done").hidden = false;
+  if (path === "parent") $("#done").querySelector("h3").textContent = "Sent. Your parent or guardian will hear from an advisor.";
+  $("#done-how").textContent = path === "parent"
+    ? "We'll send " + how + " with program details and a link to ask questions. Nothing about you was saved."
+    : "We'll reply by " + how + ". Your consent choices are saved with your request.";
+  $("#done-ref").textContent = ref;
+}
+</script>
